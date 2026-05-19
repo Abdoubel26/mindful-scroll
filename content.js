@@ -132,14 +132,14 @@ function blockWebsite() {
     blockScreen.id = "blocked-screen";
 
     blockScreen.innerHTML = `
-        <img src="${chrome.runtime.getURL('icons/icon.png')}">
+        <h1 class="warn">⛔</h1>
         <h1>Session Ended</h1>
         <h2>Your session on ${site} has ended.</h2>
 
         <div class="button-row">
-            <button id="leaveBlock" class="primaryBtn">Leave site</button>
-            <button id="extend1" class="secondaryBtn">Extend 1 min</button>
-            <button id="startNewSession" class="primaryBtn">Start New Session</button>
+        <button id="extend1" class="secondaryBtn">Extend 1 min</button>
+        <button id="startNewSession" class="secondaryBtn">Start New Session</button>
+        <button id="leaveBlock" class="primaryBtn">Leave site</button>
         </div>
     `;
 
