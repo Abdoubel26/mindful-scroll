@@ -39,7 +39,7 @@ To set up a development environment:
 - If you change source files, reload the extension via `chrome://extensions`.
 
 ## Contributing  
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines. In short:  
+Contributions are welcome! 
 - Fork the repo and create a feature branch.  
 - Write clear commit messages and document your changes.  
 - Test your code changes with the steps above.  
