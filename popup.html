@@ -2,19 +2,110 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" href="icons/icon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mindful Scroll</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 16px; }
-    h1 { font-size: 16px; margin-bottom: 8px; }
-    p { margin: 0; line-height: 1.5; }
-    a { color: #1a73e8; text-decoration: none; }
+    :root {
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 20px;
+      width: 320px;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .header img {
+      width: 28px;
+      height: 28px;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-muted);
+      margin: 0 0 16px 0;
+    }
+
+    .status-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .status-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .status-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .footer {
+      font-size: 11px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      color: var(--text-muted);
+    }
+
+    .footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <h1>Mindful Scroll</h1>
-  <p>Open a supported site like YouTube, X, Reddit, Instagram, Facebook, or TikTok and the page overlay will appear.</p>
-  <p>If you do not see it, refresh the site tab.</p>
+  <div class="header">
+    <img src="icons/icon32.png" alt="Logo" />
+    <h1>Mindful Scroll</h1>
+  </div>
+  
+  <p>Take back control of your time. Navigate to any supported site to initiate your mindful scrolling session.</p>
+
+  <div class="status-card">
+    <div class="status-title">Supported Sites</div>
+    <div class="status-value">YouTube, X, Reddit, Instagram, Facebook, TikTok, Discord</div>
+  </div>
+
+  <div class="footer">
+    Need help? Visit our <a href="https://https://github.com/Abdoubel26/mindful-scroll" target="_blank">Documentation</a>
+  </div>
 </body>
 </html>

@@ -4,41 +4,50 @@ const site = window.location.hostname
 
 let timeOut = null;
 
-/* ---------------------------
-   LOAD STATE (PER SITE)
-----------------------------*/
 chrome.storage.local.get(["sessions"], (data) => {
-
     const sessions = data.sessions || {};
     const endTime = sessions[site];
 
     if (endTime) {
-
         if (Date.now() >= endTime) {
             blockWebsite();
         } else {
             startTimer(endTime);
         }
-
     } else {
         showPopup();
     }
 });
 
+function getShadowRoot() {
+    let host = document.getElementById("mindful-scroll-root");
+    if (!host) {
+        host = document.createElement("div");
+        host.id = "mindful-scroll-root";
+        host.style.position = "fixed";
+        host.style.zIndex = "999999999";
+        document.body.appendChild(host);
+        
+        const shadowRoot = host.attachShadow({ mode: "open" });
+        
 
-/* ---------------------------
-   POPUP UI
-----------------------------*/
+        const styleLink = document.createElement("link");
+        styleLink.rel = "stylesheet";
+        styleLink.href = chrome.runtime.getURL("styles.css");
+        shadowRoot.appendChild(styleLink);
+    }
+    return host.shadowRoot;
+}
+
 function showPopup() {
-
-    if (document.getElementById("popup")) return;
+    const shadow = getShadowRoot();
+    if (shadow.getElementById("popup")) return;
 
     const overlay = document.createElement("div");
     overlay.id = "popup";
 
     overlay.innerHTML = `
         <div class="form">
-
             <h1>What are you going to do on ${site}?</h1>
             <textarea rows="3" id="textarea" placeholder="Write your intention..."></textarea>
 
@@ -49,29 +58,23 @@ function showPopup() {
                 <button id="leaveBtn" class="primaryBtn">Leave site</button>
                 <button id="btn" class="secondaryBtn">Start Session</button>
             </div>
-
         </div>
     `;
 
-    document.body.appendChild(overlay);
+    shadow.appendChild(overlay);
 
-    document.getElementById("btn").addEventListener("click", startSession);
-    document.getElementById("leaveBtn").addEventListener("click", leaveSite);
+    shadow.getElementById("btn").addEventListener("click", startSession);
+    shadow.getElementById("leaveBtn").addEventListener("click", leaveSite);
 }
 
-
-/* ---------------------------
-   START SESSION
-----------------------------*/
 function startSession() {
-
-    const textarea = document.getElementById("textarea");
-    const timeInput = document.getElementById("timeInput");
+    const shadow = getShadowRoot();
+    const textarea = shadow.getElementById("textarea");
+    const timeInput = shadow.getElementById("timeInput");
 
     const reason = textarea.value.trim();
     const time = Number(timeInput.value);
 
-    // FIXED VALIDATION (was wrong before)
     if (!time || time <= 0 || !reason) {
         alert("Please enter valid intention and time");
         return;
@@ -80,26 +83,17 @@ function startSession() {
     const ms = time * 60 * 1000;
     const endTime = Date.now() + ms;
 
-    // PER-SITE STORAGE (IMPORTANT FIX)
     chrome.storage.local.get(["sessions"], (data) => {
-
         const sessions = data.sessions || {};
         sessions[site] = endTime;
-
         chrome.storage.local.set({ sessions });
     });
 
-    document.getElementById("popup")?.remove();
-
+    shadow.getElementById("popup")?.remove();
     startTimer(endTime);
 }
 
-
-/* ---------------------------
-   TIMER SYSTEM
-----------------------------*/
 function startTimer(endTime) {
-
     clearTimeout(timeOut);
 
     const remaining = endTime - Date.now();
@@ -112,13 +106,9 @@ function startTimer(endTime) {
     timeOut = setTimeout(blockWebsite, remaining);
 }
 
-
-/* ---------------------------
-   BLOCK SCREEN
-----------------------------*/
 function blockWebsite() {
-
-    if (document.getElementById("blocked-screen")) return;
+    const shadow = getShadowRoot();
+    if (shadow.getElementById("blocked-screen")) return;
 
     clearTimeout(timeOut);
 
@@ -137,50 +127,40 @@ function blockWebsite() {
         <h2>Your session on ${site} has ended.</h2>
 
         <div class="button-row">
-        <button id="extend1" class="secondaryBtn">Extend 1 min</button>
-        <button id="startNewSession" class="secondaryBtn">Start New Session</button>
-        <button id="leaveBlock" class="primaryBtn">Leave site</button>
+            <button id="extend1" class="secondaryBtn">Extend 1 min</button>
+            <button id="startNewSession" class="secondaryBtn">Start New Session</button>
+            <button id="leaveBlock" class="primaryBtn">Leave site</button>
         </div>
     `;
 
-    document.body.appendChild(blockScreen);
+    shadow.appendChild(blockScreen);
 
-    document.getElementById("leaveBlock").onclick = leaveSite;
-    document.getElementById("extend1").onclick = () => extendSession(1);
+    shadow.getElementById("leaveBlock").onclick = leaveSite;
+    shadow.getElementById("extend1").onclick = () => extendSession(1);
 
-    document.getElementById("startNewSession").onclick = () => {
-        document.getElementById("blocked-screen")?.remove();
+    shadow.getElementById("startNewSession").onclick = () => {
+        shadow.getElementById("blocked-screen")?.remove();
         showPopup();
     };
 }
 
-
-/* ---------------------------
-   EXTEND SESSION
-----------------------------*/
 function extendSession(minutes) {
-
+    const shadow = getShadowRoot();
     const ms = minutes * 60 * 1000;
     const newEnd = Date.now() + ms;
 
     chrome.storage.local.get(["sessions"], (data) => {
-
         const sessions = data.sessions || {};
         sessions[site] = newEnd;
-
         chrome.storage.local.set({ sessions });
     });
 
     clearTimeout(timeOut);
     startTimer(newEnd);
 
-    document.getElementById("blocked-screen")?.remove();
+    shadow.getElementById("blocked-screen")?.remove();
 }
 
-
-/* ---------------------------
-   LEAVE SITE
-----------------------------*/
 function leaveSite() {
     chrome.storage.local.get(["sessions"], (data) => {
         const sessions = data.sessions || {};
