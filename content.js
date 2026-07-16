@@ -127,7 +127,6 @@ function blockWebsite() {
         <h2>Your session on ${site} has ended.</h2>
 
         <div class="button-row">
-            <button id="extend1" class="secondaryBtn">Extend 1 min</button>
             <button id="startNewSession" class="secondaryBtn">Start New Session</button>
             <button id="leaveBlock" class="primaryBtn">Leave site</button>
         </div>
@@ -136,7 +135,6 @@ function blockWebsite() {
     shadow.appendChild(blockScreen);
 
     shadow.getElementById("leaveBlock").onclick = leaveSite;
-    shadow.getElementById("extend1").onclick = () => extendSession(1);
 
     shadow.getElementById("startNewSession").onclick = () => {
         shadow.getElementById("blocked-screen")?.remove();
